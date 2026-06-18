@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Final_tiket</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f3f4f6;padding:20px 20px 140px}
+.banner{max-width:900px;margin:0 auto 25px;overflow:hidden;border-radius:24px}.banner img{width:100%;display:block;border-radius:24px}.wrap{max-width:900px;margin:auto}
+h1{font-size:42px;margin:10px 0 25px}
+.card{background:#fff;border:1px solid #ddd;border-radius:28px;overflow:hidden;margin-bottom:28px;position:relative}
+.card:before,.card:after{content:"";position:absolute;width:38px;height:38px;border-radius:50%;background:#f3f4f6;top:72%;transform:translateY(-50%)}
+.card:before{left:-19px}.card:after{right:-19px}
+.content{padding:35px}
+.top{display:flex;justify-content:space-between;gap:10px}
+.name{font-size:22px;font-weight:700}
+.badge{background:#dcfce7;color:#15803d;padding:10px 15px;border-radius:10px;font-weight:700}
+.info{margin-top:25px;font-size:15px;line-height:2;font-style:italic}
+.limit{display:inline-block;margin-top:20px;background:#eef2ff;color:#4361ee;padding:10px 15px;border-radius:10px;font-weight:700}
+.hr{margin-top:25px;border-top:2px dashed #ddd}
+.bottom{padding:25px 35px;display:flex;justify-content:space-between;align-items:center}
+.price{font-size:28px;font-weight:800}
+.qty{display:flex;align-items:center;gap:12px}
+.btn{width:42px;height:42px;border:none;border-radius:10px;background:#4361ee;color:#fff;font-size:24px}
+.num{min-width:35px;text-align:center;font-size:22px;font-weight:700}
+.footer{text-align:center;padding:60px 20px}
+.logo{font-size:48px;font-weight:800;color:#2934b6}
+.contact{margin-top:15px;font-size:20px}
+.copy{margin-top:25px;padding-top:20px;border-top:1px solid #ddd;color:#666}
+.checkout{position:fixed;left:0;right:0;bottom:0;background:#fff;padding:18px;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
+.bar{max-width:900px;margin:auto}
+.row{display:flex;justify-content:space-between;font-size:20px;font-weight:700;margin-bottom:12px}
+.buy{width:100%;height:58px;border:none;border-radius:14px;background:#8ea2f5;color:#fff;font-size:22px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="banner"><img src="banner.png" alt="Banner Event"></div>
+<div class="wrap">
+<h1>🎟️ Kategori Tiket</h1>
+
+<div class="card">
+<div class="content">
+<div class="top">
+<div class="name">Early Bird – Bolo Area (VIP)</div>
+<div class="badge">ON SALE</div>
+</div>
+<div class="info">
+- Maksimal pembelian 5 tiket dalam 1 kali transaksi<br><br>
+- Tiket di semua kategori merupakan tiket berdiri<br><br>
+- Ibu hamil tidak disarankan memasuki area venue Jomlo Festival 2026 #Yogyakarta<br><br>
+- Tiket tidak bisa dipindahtangankan dengan alasan apapun<br><br>
+- Promotor tidak bertanggung jawab atas pembelian tiket di luar partner resmi Artatix
+</div>
+<div class="limit">⏰ Limited Time</div>
+<div class="hr"></div>
+</div>
+<div class="bottom">
+<div class="price">Rp100.000</div>
+<div class="qty">
+<button class="btn" onclick="chg('vip',-1)">-</button>
+<div id="vip" class="num">0</div>
+<button class="btn" onclick="chg('vip',1)">+</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="content">
+<div class="top">
+<div class="name">Early Bird – Jomlo Area (Festival)</div>
+<div class="badge">ON SALE</div>
+</div>
+<div class="info">
+- Maksimal pembelian 5 tiket dalam 1 kali transaksi<br><br>
+- Tiket di semua kategori merupakan tiket berdiri<br><br>
+- Ibu hamil tidak disarankan memasuki area venue Jomlo Festival 2026 #Yogyakarta<br><br>
+- Tiket tidak bisa dipindahtangankan dengan alasan apapun<br><br>
+- Promotor tidak bertanggung jawab atas pembelian tiket di luar partner resmi Artatix
+</div>
+<div class="limit">⏰ Limited Time</div>
+<div class="hr"></div>
+</div>
+<div class="bottom">
+<div class="price">Rp75.000</div>
+<div class="qty">
+<button class="btn" onclick="chg('fest',-1)">-</button>
+<div id="fest" class="num">0</div>
+<button class="btn" onclick="chg('fest',1)">+</button>
+</div>
+</div>
+</div>
+
+<div class="footer">
+<div class="logo">Artatix</div>
+<div class="contact">+62 821-3767-6220</div>
+<div class="contact">cs@artatix.co.id</div>
+<div class="copy">© 2026 Artatix. Hak Cipta Dilindungi.</div>
+</div>
+</div>
+
+<div class="checkout">
+<div class="bar">
+<div class="row">
+<span>Harga Mulai dari</span>
+<span id="total">Rp0</span>
+</div>
+<button class="buy" onclick="beli()">Beli Sekarang</button>
+</div>
+</div>
+
+<script>
+let vip=0,fest=0;
+const VP=100000,FP=75000;
+function chg(id,v){
+ if(id==='vip'){vip=Math.max(0,vip+v);document.getElementById('vip').innerText=vip;}
+ else{fest=Math.max(0,fest+v);document.getElementById('fest').innerText=fest;}
+ const t=vip*VP+fest*FP;
+ document.getElementById('total').innerText='Rp'+t.toLocaleString('id-ID');
+}
+function beli(){
+ const total=vip*VP+fest*FP;
+ const jumlahTiket=vip+fest;
+ if(jumlahTiket<1){alert('Pilih tiket terlebih dahulu');return;}
+ let arr=[];
+ if(vip>0) arr.push('Early Bird - Bolo Area (VIP) x'+vip);
+ if(fest>0) arr.push('Early Bird - Jomlo Area (Festival) x'+fest);
+ localStorage.setItem('jenisTiket',arr.join(', '));
+ localStorage.setItem('jumlahTiket',jumlahTiket);
+ localStorage.setItem('totalPembayaran',total);
+ window.location.href='from.html';
+}
+</script>
+</body>
+</html>
