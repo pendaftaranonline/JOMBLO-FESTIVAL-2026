@@ -134,7 +134,7 @@ async function kirimData() {
     const wajib = ["nama","identitas","nomorId","email","wa","alamat"];
 
     for (const id of wajib) {
-        if (!$ (id).value.trim()) {
+        if (!$(id).value.trim()) {
             alert("Mohon lengkapi semua data.");
             return;
         }
