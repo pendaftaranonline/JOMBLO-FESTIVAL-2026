@@ -42,7 +42,33 @@ h1{font-size:42px;margin:10px 0 25px}
 <div class="card">
 <div class="content">
 <div class="top">
-<div class="name">Early Bird – Bolo Area (VIP)</div>
+<div class="name">REGULER – Bolo Area (VIP)</div>
+<div class="badge">ON SALE</div>
+</div>
+<div class="info">
+- Maksimal pembelian 5 tiket dalam 1 kali transaksi<br><br>
+- Tiket di semua kategori merupakan tiket berdiri<br><br>
+- Ibu hamil tidak disarankan memasuki area venue Jomlo Festival 2026 #Yogyakarta<br><br>
+- Tiket tidak bisa dipindahtangankan dengan alasan apapun<br><br>
+- Promotor tidak bertanggung jawab atas pembelian tiket di luar partner resmi Artatix
+</div>
+<div class="limit">⏰ Limited Time</div>
+<div class="hr"></div>
+</div>
+<div class="bottom">
+<div class="price">Rp150.000</div>
+<div class="qty">
+<button class="btn" onclick="chg('vip',-1)">-</button>
+<div id="vip" class="num">0</div>
+<button class="btn" onclick="chg('vip',1)">+</button>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="content">
+<div class="top">
+<div class="name">REGULER – Jomlo Area (Festival)</div>
 <div class="badge">ON SALE</div>
 </div>
 <div class="info">
@@ -57,32 +83,6 @@ h1{font-size:42px;margin:10px 0 25px}
 </div>
 <div class="bottom">
 <div class="price">Rp100.000</div>
-<div class="qty">
-<button class="btn" onclick="chg('vip',-1)">-</button>
-<div id="vip" class="num">0</div>
-<button class="btn" onclick="chg('vip',1)">+</button>
-</div>
-</div>
-</div>
-
-<div class="card">
-<div class="content">
-<div class="top">
-<div class="name">Early Bird – Jomlo Area (Festival)</div>
-<div class="badge">ON SALE</div>
-</div>
-<div class="info">
-- Maksimal pembelian 5 tiket dalam 1 kali transaksi<br><br>
-- Tiket di semua kategori merupakan tiket berdiri<br><br>
-- Ibu hamil tidak disarankan memasuki area venue Jomlo Festival 2026 #Yogyakarta<br><br>
-- Tiket tidak bisa dipindahtangankan dengan alasan apapun<br><br>
-- Promotor tidak bertanggung jawab atas pembelian tiket di luar partner resmi Artatix
-</div>
-<div class="limit">⏰ Limited Time</div>
-<div class="hr"></div>
-</div>
-<div class="bottom">
-<div class="price">Rp75.000</div>
 <div class="qty">
 <button class="btn" onclick="chg('fest',-1)">-</button>
 <div id="fest" class="num">0</div>
@@ -111,7 +111,7 @@ h1{font-size:42px;margin:10px 0 25px}
 
 <script>
 let vip=0,fest=0;
-const VP=100000,FP=75000;
+const VP=150000,FP=100000;
 function chg(id,v){
  if(id==='vip'){vip=Math.max(0,vip+v);document.getElementById('vip').innerText=vip;}
  else{fest=Math.max(0,fest+v);document.getElementById('fest').innerText=fest;}
@@ -123,8 +123,8 @@ function beli(){
  const jumlahTiket=vip+fest;
  if(jumlahTiket<1){alert('Pilih tiket terlebih dahulu');return;}
  let arr=[];
- if(vip>0) arr.push('Early Bird - Bolo Area (VIP) x'+vip);
- if(fest>0) arr.push('Early Bird - Jomlo Area (Festival) x'+fest);
+ if(vip>0) arr.push('Reguler - Bolo Area (VIP) x'+vip);
+ if(fest>0) arr.push('Reguler - Jomlo Area (Festival) x'+fest);
  localStorage.setItem('jenisTiket',arr.join(', '));
  localStorage.setItem('jumlahTiket',jumlahTiket);
  localStorage.setItem('totalPembayaran',total);
