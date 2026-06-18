@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -28,7 +27,6 @@ input,select,textarea{width:100%;padding:16px;margin-top:8px;border-radius:16px;
 </style>
 </head>
 <body>
-
 <div class="container">
 <div class="banner"><img src="poster.png" alt="Banner Event"></div>
 
@@ -37,7 +35,7 @@ input,select,textarea{width:100%;padding:16px;margin-top:8px;border-radius:16px;
 <p>Festival Musik & Hiburan Terbesar Tahun Ini</p>
 <div class="event-info">
 <div>📅 20-21 Juni</div>
-<div>📍 TAMAN MINI INDONESIA INDAH (TMII) </div>
+<div>📍 TAMAN MINI INDONESIA INDAH (TMII)</div>
 </div>
 </div>
 
@@ -72,7 +70,6 @@ input,select,textarea{width:100%;padding:16px;margin-top:8px;border-radius:16px;
 <div class="check"><input type="checkbox" id="setuju1"><label for="setuju1">Data yang saya isi adalah benar.</label></div>
 <div class="check"><input type="checkbox" id="setuju2"><label for="setuju2">Saya menyetujui syarat dan ketentuan acara.</label></div>
 </div>
-
 </div>
 
 <div class="bottom">
@@ -81,21 +78,30 @@ input,select,textarea{width:100%;padding:16px;margin-top:8px;border-radius:16px;
 
 <div id="loading">Sedang memproses...</div>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
+emailjs.init({
+    publicKey: "GANTI_DENGAN_PUBLIC_KEY_ANDA"
+});
+
+const nama = document.getElementById('nama');
+const identitas = document.getElementById('identitas');
+const nomorId = document.getElementById('nomorId');
+const email = document.getElementById('email');
+const wa = document.getElementById('wa');
+const alamat = document.getElementById('alamat');
+
 const total = localStorage.getItem('totalPembayaran') || 0;
 const jumlahTiket = localStorage.getItem('jumlahTiket') || 0;
 const jenisTiket = localStorage.getItem('jenisTiket') || '-';
 
-document.getElementById('totalBayar').innerText =
-'Rp' + Number(total).toLocaleString('id-ID');
-
-document.getElementById('jumlahTiket').innerText = jumlahTiket;
-document.getElementById('jenisTiket').innerText = jenisTiket;
+document.getElementById('totalBayar').innerText='Rp'+Number(total).toLocaleString('id-ID');
+document.getElementById('jumlahTiket').innerText=jumlahTiket;
+document.getElementById('jenisTiket').innerText=jenisTiket;
 
 document.getElementById('lanjut').onclick=function(){
 
 const wajib=['nama','identitas','nomorId','email','wa','alamat'];
-
 for(let id of wajib){
  if(!document.getElementById(id).value.trim()){
    alert('Mohon lengkapi semua data.');
@@ -115,46 +121,26 @@ localStorage.setItem('email',email.value);
 localStorage.setItem('wa',wa.value);
 localStorage.setItem('alamat',alamat.value);
 
-/* EMAILJS */
-
-emailjs.send(
-    "service_mp5tixd",
-    "template_sifrpxs",
-    {
-        nama: nama.value,
-        identitas: identitas.value,
-        nomor_id: nomorId.value,
-        email: email.value,
-        whatsapp: wa.value,
-        alamat: alamat.value,
-        jenis_tiket: jenisTiket,
-        jumlah_tiket: jumlahTiket,
-        total_bayar: total
-    }
-)
-.then(function(response){
-    console.log("EMAIL TERKIRIM", response.status);
+emailjs.send("service_mp5tixd","template_sifrpxs",{
+ nama:nama.value,
+ identitas:identitas.value,
+ nomor_id:nomorId.value,
+ email:email.value,
+ whatsapp:wa.value,
+ alamat:alamat.value,
+ jenis_tiket:jenisTiket,
+ jumlah_tiket:jumlahTiket,
+ total_bayar:total
+})
+.then(function(){
+ document.getElementById('loading').style.display='flex';
+ setTimeout(()=>{window.location.href='qris.html';},3000);
 })
 .catch(function(error){
-    console.log("GAGAL KIRIM", error);
+ console.log(error);
+ alert('Gagal mengirim email. Cek konfigurasi EmailJS.');
 });
-
-/* END EMAILJS */
-
-document.getElementById('loading').style.display='flex';
-setTimeout(()=>{
- window.location.href='qris.html';
-},3000);
 }
- </script>
- 
- <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
- 
-<script>
-emailjs.init({
-    publicKey: "xxxxxxxxxx"
-});
 </script>
-
 </body>
-</html> 
+</html>
