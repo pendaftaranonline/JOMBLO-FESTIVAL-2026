@@ -1,38 +1,197 @@
 <!DOCTYPE html>
-<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pending Verifikasi</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Status Pembayaran - JOMBLO FEST 2026</title>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(circle at top left, rgba(255,215,0,.12), transparent 35%),linear-gradient(135deg,#12051f,#2d0b45,#4c1d95,#7e22ce);color:#fff}
-.card{max-width:600px;width:100%;text-align:center;background:rgba(255,255,255,.12);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.15);border-radius:28px;padding:35px}
-.icon{font-size:70px;margin-bottom:15px}
-h1{color:#FFD700;margin-bottom:10px}
-.info{line-height:1.8;margin-top:15px}
-.badge{display:inline-block;background:rgba(255,215,0,.15);padding:10px 18px;border-radius:999px;margin:15px 0;color:#FFD700;font-weight:700}
-.timer{margin-top:15px;font-size:20px;font-weight:700}
-</style></head>
-<body><div class="card">
-<div class="icon">⏳</div>
-<h1>Pembayaran Sedang Diverifikasi</h1>
-<div class="badge">STATUS: PENDING</div>
-<div class="info">
-<p>Terima kasih. Bukti pembayaran telah berhasil dikirim.</p>
-<p>Tim kami akan melakukan verifikasi pembayaran Anda secepatnya.</p>
-<p>Anda akan diarahkan otomatis ke halaman sukses.</p>
-</div>
-<div class="timer">Redirect dalam <span id="count">15</span> detik</div>
-</div>
-<script>
-let s=15;
-const el=document.getElementById('count');
-const t=setInterval(()=>{
-s--;
-el.textContent=s;
-if(s<=0){
-clearInterval(t);
-window.location.href='success.html';
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
 }
-},1000);
-</script>
-</body></html>
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4ea4ff,#6eb8ff,#8bc8ff);
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    background:#ffffff;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+.banner{
+    width:100%;
+    display:block;
+}
+
+.content{
+    padding:35px;
+    text-align:center;
+}
+
+.title{
+    font-size:42px;
+    font-weight:900;
+    color:#ffbf00;
+    text-shadow:
+    2px 2px 0 #000,
+    4px 4px 0 rgba(0,0,0,.15);
+    margin-bottom:20px;
+}
+
+.status-box{
+    background:#fff4d4;
+    border:4px dashed #ffbf00;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:25px;
+}
+
+.status{
+    font-size:34px;
+    font-weight:bold;
+    color:#ff6b00;
+    margin-bottom:10px;
+}
+
+.message{
+    color:#333;
+    font-size:18px;
+    line-height:1.8;
+    text-align:justify;
+}
+
+.footer{
+    background:#4ea4ff;
+    padding:25px;
+    text-align:center;
+}
+
+.footer-title{
+    color:#fff;
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:2px;
+}
+
+.footer-text{
+    color:#fff;
+    margin-top:10px;
+    font-size:15px;
+}
+
+.icon{
+    font-size:60px;
+    margin-bottom:15px;
+}
+
+.notice{
+    margin-top:20px;
+    background:#eaf6ff;
+    border-left:6px solid #4ea4ff;
+    border-radius:10px;
+    padding:15px;
+    text-align:left;
+    color:#333;
+    line-height:1.7;
+}
+
+@media(max-width:768px){
+
+.title{
+    font-size:32px;
+}
+
+.status{
+    font-size:28px;
+}
+
+.message{
+    font-size:16px;
+}
+
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <img src="banner.png" class="banner" alt="Banner Event">
+
+    <div class="content">
+
+        <div class="title">
+            JOMBLO FEST 2026
+        </div>
+
+        <div class="status-box">
+
+            <div class="icon">⏳</div>
+
+            <div class="status">
+                STATUS PENDING
+            </div>
+
+        </div>
+
+        <div class="message">
+
+            PEMBAYARAN ANDA MASIH BERSTATUS <b>PENDING</b> DIKARENAKAN
+            PEMBAYARAN ANDA BELUM TERBACA OLEH SISTEM KAMI.
+
+            <br><br>
+
+            SILAKAN CEK KOTAK MASUK DAN FOLDER SPAM PADA
+            E-MAIL YANG ANDA DAFTARKAN SAAT PEMBELIAN TIKET.
+
+            <br><br>
+
+            STATUS E-TICKET AKAN BERUBAH MENJADI
+            <b>SUCCESS</b> APABILA PEMBAYARAN TELAH MASUK DAN
+            BERHASIL DIVERIFIKASI OLEH SISTEM.
+
+            <br><br>
+
+            PASTIKAN E-MAIL YANG ANDA DAFTARKAN
+            SELALU AKTIF DAN DAPAT MENERIMA PESAN.
+
+        </div>
+
+        <div class="notice">
+            <strong>TERIMA KASIH.</strong><br>
+            Mohon tunggu beberapa saat. Proses verifikasi pembayaran
+            dapat membutuhkan waktu tergantung metode pembayaran yang digunakan.
+        </div>
+
+    </div>
+
+    <div class="footer">
+
+        <div class="footer-title">
+            JOMBLO FEST 2026
+        </div>
+
+        <div class="footer-text">
+            Festival Musik • Hiburan • Pengalaman Tak Terlupakan
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
