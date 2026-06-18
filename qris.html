@@ -76,7 +76,7 @@ body{background:linear-gradient(135deg,#081225,#101b35);color:#fff;padding:20px}
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
-emailjs.init({"qwh-PQ-0-G6lBjI4C"});
+emailjs.init("qwh-PQ-0-G6lBjI4C");
 
 const nama=localStorage.getItem('nama')||'-';
 const jenis=localStorage.getItem('jenisTiket')||'-';
@@ -116,6 +116,10 @@ function copyNominal(){
 }
 
 function verifikasi(){
+ const agree=document.getElementById('agree');
+ const bukti=document.getElementById('bukti');
+ const overlay=document.getElementById('overlay');
+
  if(!agree.checked){alert('Centang konfirmasi pembayaran');return;}
  if(!bukti.files.length){alert('Upload bukti pembayaran');return;}
 
@@ -135,12 +139,16 @@ function verifikasi(){
   tanggal_transaksi:new Date().toLocaleString('id-ID')
  };
 
- emailjs.send('service_mp5tixd','template_sifrpxs',dataEmail);
- emailjs.send('service_mp5tixd','template_sifrpxs',dataEmail);
-
- setTimeout(()=>{
-   window.location.href='pending.html';
- },5000);
+ emailjs.send('service_mp5tixd','template_sifrpxs',dataEmail)
+ .then(()=>{
+   setTimeout(()=>{
+      window.location.href='pending.html';
+   },5000);
+ })
+ .catch(()=>{
+   overlay.style.display='none';
+   alert('Gagal mengirim konfirmasi pembayaran');
+ });
 }
 </script>
 </body>
