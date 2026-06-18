@@ -3,60 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>QRIS Payment - MOMENTA FEST</title>
-
-<link href="https://://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
+<title>Final QRIS Payment</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{background:radial-gradient(circle at top,#0b1d4a,#050816,#000);min-height:100vh;color:#fff;padding:20px}
-.wrap{max-width:700px;margin:auto}
-.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(20px);border-radius:28px;padding:24px;margin-top:20px;text-align:center}
-.timer{font-size:42px;font-weight:800;color:#00e5ff}
-.small{color:#9fb3d1;margin-bottom:10px}
-.qrbox{padding:20px;border-radius:24px;box-shadow:0 0 35px rgba(0,229,255,.25);background:rgba(255,255,255,.04);margin:20px 0}
+body{background:linear-gradient(135deg,#081225,#101b35);color:#fff;padding:20px}
+.wrap{max-width:800px;margin:auto}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(16px);border-radius:28px;padding:24px;margin-top:20px}
+.timer{font-size:44px;font-weight:800;text-align:center;color:#00e5ff}
+.timer.warning{color:#ff3b3b;animation:pulse .8s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.alert{display:none;text-align:center;color:#ff6b6b;font-weight:700;margin-top:8px}
+.alert.show{display:block;animation:pulse .8s infinite}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+.item{background:rgba(255,255,255,.05);padding:14px;border-radius:16px}
+.label{font-size:12px;color:#b8c4d8}
+.value{font-weight:700;margin-top:6px}
+.qrbox{text-align:center;padding:18px;border-radius:24px;background:#fff}
 .qrbox img{max-width:100%;border-radius:16px}
-.total{font-size:34px;font-weight:800;color:#00e5ff}
-.refresh{margin-top:10px;color:#cbd5e1}
-input[type=file]{width:100%;padding:12px;background:#fff;border-radius:12px;margin-top:10px}
-.preview{margin-top:15px;max-width:100%;display:none;border-radius:12px}
-.check{margin:18px 0;text-align:left}
-.btn{width:100%;padding:16px;border:none;border-radius:16px;background:linear-gradient(135deg,#00c8ff,#0099ff);color:#fff;font-weight:700;cursor:pointer}
-#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);justify-content:center;align-items:center;flex-direction:column;z-index:9999}
+.total{font-size:34px;font-weight:800;color:#00e5ff;text-align:center;margin:15px 0}
+.copybtn,.btn{width:100%;padding:16px;border:none;border-radius:16px;font-weight:700;cursor:pointer}
+.copybtn{background:#243b63;color:#fff;margin-bottom:15px}
+.uploadbox{border:2px dashed rgba(255,255,255,.3);padding:30px;border-radius:22px;text-align:center;background:rgba(255,255,255,.04)}
+.uploadbox input{display:none}
+.uploadbox label{cursor:pointer;display:block}
+.preview{max-width:100%;display:none;border-radius:16px;margin-top:15px}
+.btn{background:linear-gradient(135deg,#00c8ff,#0099ff);color:#fff;margin-top:15px}
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);justify-content:center;align-items:center;flex-direction:column;z-index:9999}
 .spin{width:80px;height:80px;border-radius:50%;border:6px solid rgba(255,255,255,.15);border-top:6px solid #00e5ff;animation:rot 1s linear infinite}
 @keyframes rot{100%{transform:rotate(360deg)}}
-#status{margin-top:20px;font-size:22px;font-weight:600;text-align:center}
+#status{margin-top:20px}
 </style>
 </head>
 <body>
-
 <div class="wrap">
 <div class="card">
+<div class="timer" id="payTimer">02:00</div>
+<div class="alert" id="warn">⚠ SEGERA SELESAIKAN PEMBAYARAN</div>
 
-<div class="small">SISA WAKTU PEMBAYARAN</div>
-<div id="payTimer" class="timer">30:00</div>
+<div class="info">
+<div class="item"><div class="label">Nama Pemesan</div><div class="value" id="nama">-</div></div>
+<div class="item"><div class="label">Jumlah Tiket</div><div class="value" id="jumlah">0</div></div>
+<div class="item"><div class="label">Jenis Tiket</div><div class="value" id="jenis">-</div></div>
+<div class="item"><div class="label">Total Pembayaran</div><div class="value" id="totalInfo">Rp0</div></div>
+</div>
 
 <div class="qrbox">
 <img src="qris-pembayaran1.jpg" alt="QRIS">
 </div>
 
-<div class="small">TOTAL PEMBAYARAN</div>
-<div id="total" class="total">Rp0</div>
+<div class="total" id="total">Rp0</div>
+<button class="copybtn" onclick="copyNominal()">📋 Salin Nominal Pembayaran</button>
 
-<div class="refresh">
-QR Pembayaran Akan Diperbarui Dalam
-<div id="qrTimer">05:00</div>
-</div>
-
-<div class="check">
-<label><input type="checkbox" id="agree"> Saya telah melakukan pembayaran.</label>
-</div>
-
+<div class="uploadbox">
+<label for="bukti">📤 Upload Bukti Pembayaran<br><small>Klik untuk memilih gambar</small></label>
 <input type="file" id="bukti" accept="image/*">
 <img id="preview" class="preview">
+</div>
+
+<div style="margin-top:15px">
+<label><input type="checkbox" id="agree"> Saya telah melakukan pembayaran</label>
+</div>
 
 <button class="btn" onclick="verifikasi()">KONFIRMASI PEMBAYARAN</button>
-
 </div>
 </div>
 
@@ -66,117 +75,73 @@ QR Pembayaran Akan Diperbarui Dalam
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
 <script>
-emailjs.init({
- publicKey:"qwh-PQ-0-G6lBjI4C"
-});
+emailjs.init({publicKey:"qwh-PQ-0-G6lBjI4C"});
 
-const total = localStorage.getItem('totalPembayaran') || '150000';
-document.getElementById('total').innerText =
-'Rp' + Number(total).toLocaleString('id-ID');
+const nama=localStorage.getItem('nama')||'-';
+const jenis=localStorage.getItem('jenisTiket')||'-';
+const jumlah=localStorage.getItem('jumlahTiket')||'0';
+const total=localStorage.getItem('totalPembayaran')||'0';
 
-let p = 1800;
+document.getElementById('nama').innerText=nama;
+document.getElementById('jenis').innerText=jenis;
+document.getElementById('jumlah').innerText=jumlah;
+document.getElementById('total').innerText='Rp'+Number(total).toLocaleString('id-ID');
+document.getElementById('totalInfo').innerText='Rp'+Number(total).toLocaleString('id-ID');
+
+let t=120;
+const timer=document.getElementById('payTimer');
 setInterval(()=>{
- if(p>0){
-  p--;
-  let m=Math.floor(p/60);
-  let s=p%60;
-  document.getElementById('payTimer').innerText =
-  String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+ if(t>0){
+  t--;
+  let m=Math.floor(t/60),s=t%60;
+  timer.innerText=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  if(t<=10){
+    timer.classList.add('warning');
+    document.getElementById('warn').classList.add('show');
+  }
  }
 },1000);
 
-let qr = 300;
-setInterval(()=>{
- qr--;
- if(qr<0) qr=300;
-
- let m=Math.floor(qr/60);
- let s=qr%60;
-
- document.getElementById('qrTimer').innerText =
- String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-},1000);
-
-document.getElementById('bukti').onchange = e=>{
+document.getElementById('bukti').onchange=e=>{
  const f=e.target.files[0];
- if(!f) return;
+ if(!f)return;
+ preview.src=URL.createObjectURL(f);
+ preview.style.display='block';
+}
 
- document.getElementById('preview').src =
- URL.createObjectURL(f);
-
- document.getElementById('preview').style.display='block';
+function copyNominal(){
+ navigator.clipboard.writeText(total);
+ alert('Nominal berhasil disalin');
 }
 
 function verifikasi(){
+ if(!agree.checked){alert('Centang konfirmasi pembayaran');return;}
+ if(!bukti.files.length){alert('Upload bukti pembayaran');return;}
 
- if(!document.getElementById('agree').checked){
-  alert('Centang konfirmasi pembayaran terlebih dahulu.');
-  return;
- }
-
- if(!document.getElementById('bukti').files.length){
-  alert('Upload bukti pembayaran terlebih dahulu.');
-  return;
- }
-
- document.getElementById('overlay').style.display='flex';
+ overlay.style.display='flex';
 
  const dataEmail={
-  nama:localStorage.getItem('nama')||'',
+  nama:nama,
   email:localStorage.getItem('email')||'',
   wa:localStorage.getItem('wa')||'',
   identitas:localStorage.getItem('identitas')||'',
   nomorIdentitas:localStorage.getItem('nomorIdentitas')||'',
   alamat:localStorage.getItem('alamat')||'',
-  jenis_tiket:localStorage.getItem('jenis_tiket')||'',
-  totalPembayaran:localStorage.getItem('totalPembayaran')||'',
+  jenis_tiket:jenis,
+  jumlah_tiket:jumlah,
+  totalPembayaran:total,
   metode_pembayaran:'QRIS',
   tanggal_transaksi:new Date().toLocaleString('id-ID')
  };
 
- // EMAIL ADMIN
- emailjs.send(
-  'service_9nf9rsp',
-  'template_6wlex0w',
-  dataEmail
- );
-
- // EMAIL PESERTA
- emailjs.send(
-  'service_9nf9rsp',
-  'template_egdxxaj',
-  dataEmail
- );
-
- const teks=[
- 'Pembayaran Sedang Diproses...',
- 'Menyesuaikan Data...',
- 'Mencari Bukti Pembayaran...',
- 'Memverifikasi Transaksi...',
- 'Sinkronisasi Sistem...',
- 'Mengirim Email Admin...',
- 'Mengirim Auto Reply...',
- 'Bukti Pembayaran Berhasil Dikirim...'
- ];
-
- let i=0;
-
- const jalan=setInterval(()=>{
-  i++;
-  if(i<teks.length){
-   document.getElementById('status').innerText=teks[i];
-  }
- },1500);
+ emailjs.send('service_9nf9rsp','template_6wlex0w',dataEmail);
+ emailjs.send('service_9nf9rsp','template_egdxxaj',dataEmail);
 
  setTimeout(()=>{
-  clearInterval(jalan);
-  window.location.href='status.html';
- },11000);
-
+   window.location.href='pending.html';
+ },5000);
 }
 </script>
-
 </body>
 </html>
