@@ -32,7 +32,7 @@ body{background:linear-gradient(135deg,#081225,#101b35);color:#fff;padding:20px}
 #overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);justify-content:center;align-items:center;flex-direction:column;z-index:9999}
 .spin{width:80px;height:80px;border-radius:50%;border:6px solid rgba(255,255,255,.15);border-top:6px solid #00e5ff;animation:rot 1s linear infinite}
 @keyframes rot{100%{transform:rotate(360deg)}}
-#status{margin-top:20px}
+#status{margin-top:20px;font-size:20px;font-weight:700;text-align:center;max-width:320px}
 </style>
 </head>
 <body>
@@ -49,7 +49,7 @@ body{background:linear-gradient(135deg,#081225,#101b35);color:#fff;padding:20px}
 </div>
 
 <div class="qrbox">
-<img src="qris-pembayaran1.jpg" alt="QRIS">
+<img src="qris.png" alt="QRIS">
 </div>
 
 <div class="total" id="total">Rp0</div>
@@ -71,7 +71,13 @@ body{background:linear-gradient(135deg,#081225,#101b35);color:#fff;padding:20px}
 
 <div id="overlay">
 <div class="spin"></div>
-<div id="status">Pembayaran Sedang Diproses...</div>
+<div id="status">Memproses Konfirmasi Pembayaran...</div>
+
+<div id="loadingTime" style="margin-top:12px;font-size:15px;color:#b8c4d8;">03:00</div>
+
+<div style="width:280px;height:10px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden;margin-top:20px;">
+<div id="progressBar" style="width:0%;height:100%;background:linear-gradient(90deg,#00e5ff,#0099ff);border-radius:999px;transition:width 1s linear;"></div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -91,11 +97,13 @@ document.getElementById('totalInfo').innerText='Rp'+Number(total).toLocaleString
 
 let t=120;
 const timer=document.getElementById('payTimer');
+
 setInterval(()=>{
  if(t>0){
   t--;
   let m=Math.floor(t/60),s=t%60;
   timer.innerText=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+
   if(t<=10){
     timer.classList.add('warning');
     document.getElementById('warn').classList.add('show');
@@ -106,6 +114,7 @@ setInterval(()=>{
 document.getElementById('bukti').onchange=e=>{
  const f=e.target.files[0];
  if(!f)return;
+
  preview.src=URL.createObjectURL(f);
  preview.style.display='block';
 }
@@ -116,39 +125,83 @@ function copyNominal(){
 }
 
 function verifikasi(){
+
  const agree=document.getElementById('agree');
  const bukti=document.getElementById('bukti');
  const overlay=document.getElementById('overlay');
+ const status=document.getElementById('status');
+ const loadingTime=document.getElementById('loadingTime');
+ const progressBar=document.getElementById('progressBar');
 
- if(!agree.checked){alert('Centang konfirmasi pembayaran');return;}
- if(!bukti.files.length){alert('Upload bukti pembayaran');return;}
+ if(!agree.checked){
+   alert('Centang konfirmasi pembayaran');
+   return;
+ }
+
+ if(!bukti.files.length){
+   alert('Upload bukti pembayaran');
+   return;
+ }
 
  overlay.style.display='flex';
 
  const dataEmail={
-  nama:nama,
-  email:localStorage.getItem('email')||'',
-  wa:localStorage.getItem('wa')||'',
-  identitas:localStorage.getItem('identitas')||'',
-  nomorIdentitas:localStorage.getItem('nomorIdentitas')||'',
-  alamat:localStorage.getItem('alamat')||'',
-  jenis_tiket:jenis,
-  jumlah_tiket:jumlah,
-  totalPembayaran:total,
-  metode_pembayaran:'QRIS',
-  tanggal_transaksi:new Date().toLocaleString('id-ID')
+   nama:nama,
+   email:localStorage.getItem('email')||'',
+   wa:localStorage.getItem('wa')||'',
+   identitas:localStorage.getItem('identitas')||'',
+   nomorIdentitas:localStorage.getItem('nomorIdentitas')||'',
+   alamat:localStorage.getItem('alamat')||'',
+   jenis_tiket:jenis,
+   jumlah_tiket:jumlah,
+   totalPembayaran:total,
+   metode_pembayaran:'QRIS',
+   tanggal_transaksi:new Date().toLocaleString('id-ID')
  };
 
- emailjs.send('service_mp5tixd','template_sifrpxs',dataEmail)
- .then(()=>{
-   setTimeout(()=>{
-      window.location.href='pending.html';
-   },5000);
- })
- .catch(()=>{
-   overlay.style.display='none';
-   alert('Gagal mengirim konfirmasi pembayaran');
- });
+ let totalDetik = 180;
+ let emailTerkirim = false;
+
+ const interval = setInterval(()=>{
+
+   totalDetik--;
+
+   const menit = Math.floor(totalDetik/60);
+   const detik = totalDetik%60;
+
+   loadingTime.innerText =
+     String(menit).padStart(2,'0') + ':' +
+     String(detik).padStart(2,'0');
+
+   progressBar.style.width = (((180-totalDetik)/180)*100) + '%';
+
+   if(totalDetik === 30 && !emailTerkirim){
+
+     emailTerkirim = true;
+     status.innerText='Mengirim Data Konfirmasi...';
+
+     emailjs.send('service_mp5tixd','template_sifrpxs',dataEmail)
+     .then(()=>{
+       status.innerText='Konfirmasi Berhasil Dikirim';
+     })
+     .catch(()=>{
+       clearInterval(interval);
+       overlay.style.display='none';
+       alert('Gagal mengirim konfirmasi pembayaran');
+     });
+   }
+
+   if(totalDetik <= 0){
+
+     clearInterval(interval);
+     status.innerText='Mengalihkan Halaman...';
+
+     setTimeout(()=>{
+       window.location.href='pending.html';
+     },1000);
+   }
+
+ },1000);
 }
 </script>
 </body>
